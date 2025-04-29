@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container {
+    max-width: 1340px;
+    margin: auto;
+}
+
+.title{
+    padding-bottom: 20px;
+}
+
+p{
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
+}
