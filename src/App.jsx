@@ -1,61 +1,64 @@
 import './App.css'
-import { Formik } from 'formik'
+import { useState } from 'react'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
+import RegisterForm from './components/registr/registr.jsx'
 
-function App() {
+function App({ SchemaLogin, SchemaRegistr }) {
+  const [showRegister, setShowRegister] = useState(false)
+  const [registeredUser, setRegisteredUser] = useState(null)
+  const [loginMessage, setLoginMessage] = useState('')
+
+  const handleLogin = (values) => {
+    if (
+      registeredUser &&
+      values.email === registeredUser.email &&
+      values.password === registeredUser.password
+    ) {
+      setLoginMessage('✅ Successfully logged in')
+    } else {
+      setLoginMessage('❌ Invalid email or password')
+    }
+  }
+
   return (
     <div className="container">
       <Formik
         initialValues={{
-          name: '',
-          lastName: '',
           email: '',
-          password: '',
+          password: ''
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={handleLogin}
+        validationSchema={SchemaLogin}
       >
-        {({ handleChange, handleSubmit, values }) => (
-          <>
-            <div className="live-preview">
-              <h3>Live Preview:</h3>
-              <p>Name: {values.name}</p>
-              <p>Last Name: {values.lastName}</p>
-              <p>Email: {values.email}</p>
-            </div>
+        <Form>
+          <Field name="email" placeholder="Email" />
+          <ErrorMessage name="email">{msg => <p>{msg}</p>}</ErrorMessage>
 
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                onChange={handleChange}
-                value={values.name}
-              />
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                onChange={handleChange}
-                value={values.lastName}
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={handleChange}
-                value={values.email}
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={handleChange}
-                value={values.password}
-              />
-              <button type="submit">Submit</button>
-            </form>
-          </>
-        )}
+          <Field name="password" placeholder="Password" type="password" />
+          <ErrorMessage name="password">{msg => <p>{msg}</p>}</ErrorMessage>
+
+          <button type="submit">Login</button>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => setShowRegister(prev => !prev)}
+          >
+            {showRegister ? 'Hide registration' : 'Create new account'}
+          </button>
+
+          {loginMessage && <div className="login-message">{loginMessage}</div>}
+        </Form>
       </Formik>
+
+      {showRegister && (
+        <div className="register-form">
+          <RegisterForm
+            setRegisteredUser={setRegisteredUser}
+            setShowRegister={setShowRegister}
+            SchemaRegistr={SchemaRegistr}
+          />
+        </div>
+      )}
     </div>
   )
 }
